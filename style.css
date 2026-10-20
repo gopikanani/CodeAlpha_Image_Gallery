@@ -1,0 +1,426 @@
+/* =========================
+   1. Global styles
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --background: #f1f0d1;
+    --surface: #ffffff;
+    --text: #020202;
+    --muted: #535860;
+    --primary: #4f46e5;
+    --radius: 12px;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* =========================
+   2. Header
+========================= */
+
+.header {
+    text-align: center;
+    padding: 45px 20px 30px;
+}
+
+.header h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* =========================
+   3. Gallery wrapper
+========================= */
+
+.gallery-wrapper {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    padding: 0 24px 40px;
+}
+
+/* =========================
+   4. Category filters
+========================= */
+
+.filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 30px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 14px;
+    cursor: pointer;
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+}
+
+.filter-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Keyboard focus */
+button:focus-visible {
+    outline: 3px solid #a5b4fc;
+    outline-offset: 3px;
+}
+
+/* =========================
+   5. Responsive gallery grid
+========================= */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* =========================
+   6. Image cards
+========================= */
+
+.gallery-item {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: #e5e7eb;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 6%);
+
+    animation: fadeIn 0.45s ease both;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgb(0 0 0 / 14%);
+}
+
+.gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.08);
+}
+
+/* Image title overlay */
+
+.image-overlay {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 35px 15px 15px;
+    color: white;
+    background: linear-gradient(
+        transparent,
+        rgb(0 0 0 / 75%)
+    );
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+}
+
+.gallery-item:hover .image-overlay,
+.gallery-item:focus-visible .image-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.image-overlay h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.image-overlay p {
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+/* =========================
+   7. Lightbox
+========================= */
+
+.lightbox[hidden] {
+    display: none;
+}
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 60px 70px;
+    background: rgb(0 0 0 / 94%);
+    animation: fadeIn 0.25s ease;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 42px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.lightbox-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px;
+    width: 100%;
+    max-height: 100%;
+}
+
+.lightbox-content img {
+    display: block;
+    max-width: 100%;
+    max-height: calc(100vh - 160px);
+    max-height: calc(100dvh - 160px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    animation: zoomIn 0.3s ease;
+}
+
+#imageCaption {
+    color: white;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+#imageCounter {
+    color: #cbd5e1;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+
+    background: rgb(255 255 255 / 15%);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: var(--primary);
+}
+
+.prev-btn {
+    left: 20px;
+}
+
+.next-btn {
+    right: 20px;
+}
+
+/* =========================
+   8. Empty state and footer
+========================= */
+
+.empty-message {
+    padding: 40px 10px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.footer {
+    padding: 25px 15px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* =========================
+   9. Animations
+========================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =========================
+   10. Tablet
+========================= */
+
+@media (max-width: 900px) {
+    .gallery-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+    }
+}
+
+/* =========================
+   11. Mobile
+========================= */
+
+@media (max-width: 600px) {
+    .header {
+        padding: 30px 15px 22px;
+    }
+
+    .gallery-wrapper {
+        padding: 0 14px 30px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .filter-container {
+        gap: 8px;
+        margin-bottom: 22px;
+    }
+
+    .filter-btn {
+        padding: 9px 14px;
+        font-size: 13px;
+    }
+
+    .image-overlay {
+        opacity: 1;
+        transform: none;
+        padding: 28px 9px 9px;
+    }
+
+    .image-overlay h3 {
+        font-size: 13px;
+    }
+
+    .image-overlay p {
+        font-size: 11px;
+    }
+
+    .lightbox {
+        padding: 60px 15px;
+    }
+
+    .nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .prev-btn {
+        left: 8px;
+    }
+
+    .next-btn {
+        right: 8px;
+    }
+
+    .close-btn {
+        top: 15px;
+        right: 15px;
+    }
+
+    .lightbox-content img {
+        max-height: calc(100dvh - 180px);
+    }
+}
+
+/* Very small screens */
+
+@media (max-width: 350px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
